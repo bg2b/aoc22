@@ -42,6 +42,7 @@ void part1() {
   cout << total << '\n';
 }
 
+#if 0
 // Bit flicking approach, since the number of item types isn't large
 void part2() {
   using bitmask = unsigned long;
@@ -66,6 +67,7 @@ void part2() {
   }
   cout << total << '\n';
 }
+#endif
 
 #if 0
 // Merge-like string approach, not relying on number of item types
@@ -103,6 +105,29 @@ void part2() {
   cout << total << '\n';
 }
 #endif
+
+// String set approach
+void part2() {
+  auto packs = read();
+  assert(packs.size() % 3 == 0);
+  for (auto &pack : packs) {
+    sort(pack.begin(), pack.end());
+    pack.resize(unique(pack.begin(), pack.end()) - pack.begin());
+  }
+  int total = 0;
+  for (size_t i = 0; i < packs.size(); i += 3) {
+    auto const &p1 = packs[i + 0];
+    auto const &p2 = packs[i + 1];
+    auto const &p3 = packs[i + 2];
+    string in12;
+    set_intersection(p1.begin(), p1.end(), p2.begin(), p2.end(), back_inserter(in12));
+    string common;
+    set_intersection(in12.begin(), in12.end(), p3.begin(), p3.end(), back_inserter(common));
+    assert(common.size() == 1);
+    total += priority(common[0]);
+  }
+  cout << total << '\n';
+}
 
 int main(int argc, char **argv) {
   if (argc != 2) {
