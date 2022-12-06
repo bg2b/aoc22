@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <string>
+#include <array>
+#include <algorithm>
 #include <cassert>
 
 using namespace std;
@@ -29,6 +31,7 @@ void find_sync(size_t n) {
 }
 #endif
 
+#if 0
 // Boyer-Moore-like
 void find_sync(size_t n) {
   string line;
@@ -59,6 +62,26 @@ void find_sync(size_t n) {
     ;
   assert(pos < line.length());
   cout << pos + 1 << '\n';
+}
+#endif
+
+// Set-based
+void find_sync(size_t n) {
+  string line;
+  getline(cin, line);
+  array<unsigned, 256> occurrences;
+  fill(occurrences.begin(), occurrences.end(), 0);
+  unsigned num_unique = 0;
+  size_t i;
+  for (i = 0; i < line.length() && num_unique < n; ++i) {
+    if (i >= n && --occurrences[line[i - n]] == 0)
+      --num_unique;
+    if (occurrences[line[i]]++ == 0)
+      ++num_unique;
+  }
+  // The ++i after the last character in the sync happens before the
+  // loop breaks with num_unique == n
+  cout << i << '\n';
 }
 
 void part1() { find_sync(4); }
