@@ -106,6 +106,7 @@ void part2() {
 }
 #endif
 
+#if 0
 // String set approach
 void part2() {
   auto packs = read();
@@ -125,6 +126,29 @@ void part2() {
     set_intersection(in12.begin(), in12.end(), p3.begin(), p3.end(), back_inserter(common));
     assert(common.size() == 1);
     total += priority(common[0]);
+  }
+  cout << total << '\n';
+}
+#endif
+
+// Merge-like, but going from the other far end
+void part2() {
+  auto packs = read();
+  assert(packs.size() % 3 == 0);
+  for (auto &pack : packs) {
+    sort(pack.begin(), pack.end());
+  }
+  int total = 0;
+  for (size_t i = 0; i < packs.size(); i += 3) {
+    auto &p1 = packs[i + 0];
+    auto &p2 = packs[i + 1];
+    auto &p3 = packs[i + 2];
+    while (p1.back() != p2.back() || p1.back() != p3.back()) {
+      while (p1.back() > p2.back() || p1.back() > p3.back()) p1.pop_back();
+      while (p2.back() > p1.back() || p2.back() > p3.back()) p2.pop_back();
+      while (p3.back() > p1.back() || p3.back() > p2.back()) p3.pop_back();
+    }
+    total += priority(p1.back());
   }
   cout << total << '\n';
 }
