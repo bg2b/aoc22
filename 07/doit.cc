@@ -37,8 +37,9 @@ struct inode {
 inode::inode(inode *parent_, size_t size_) : size(size_), parent(parent_) {}
 
 void inode::make_entry(string const &new_name, size_t new_size) {
-  assert(contents.find(new_name) == contents.end());
-  contents[new_name] = inode(this, new_size);
+  if (contents.find(new_name) == contents.end())
+    contents[new_name] = inode(this, new_size);
+  // else if the entry already exists, I assume it's the same
 }
 
 void inode::print(string const &name) const {
