@@ -11,10 +11,8 @@
 using namespace std;
 
 int to_rps(char c) {
-  if (c > 'C') {
-    assert(c >= 'X' && c <= 'Z');
+  if (c >= 'X' && c <= 'Z')
     return c - 'X';
-  }
   assert(c >= 'A' && c <= 'C');
   return c - 'A';
 }
