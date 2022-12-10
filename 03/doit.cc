@@ -70,43 +70,6 @@ void part2() {
 #endif
 
 #if 0
-// Merge-like string approach, not relying on number of item types
-void part2() {
-  auto packs = read();
-  assert(packs.size() % 3 == 0);
-  for (auto &pack : packs) {
-    sort(pack.begin(), pack.end());
-    pack.resize(unique(pack.begin(), pack.end()) - pack.begin());
-  }
-  int total = 0;
-  for (size_t i = 0; i < packs.size(); i += 3) {
-    auto const &pack1 = packs[i + 0];
-    auto const &pack2 = packs[i + 1];
-    auto const &pack3 = packs[i + 2];
-    size_t p1 = 0, p2 = 0, p3 = 0;
-    while (true) {
-      assert(p1 < pack1.size() && p2 < pack2.size() && p3 < pack3.size());
-      char c1 = pack1[p1];
-      char c2 = pack2[p2];
-      char c3 = pack3[p3];
-      if (c1 < c2 || c1 < c3)
-	++p1;
-      else if (c2 < c1 || c2 < c3)
-	++p2;
-      else if (c3 < c1 || c3 < c2)
-	++p3;
-      else {
-	assert(c1 == c2 && c1 == c3);
-	total += priority(c1);
-	break;
-      }
-    }
-  }
-  cout << total << '\n';
-}
-#endif
-
-#if 0
 // String set approach
 void part2() {
   auto packs = read();
@@ -131,7 +94,7 @@ void part2() {
 }
 #endif
 
-// Merge-like, but going from the other far end
+// Merge-like approach
 void part2() {
   auto packs = read();
   assert(packs.size() % 3 == 0);
