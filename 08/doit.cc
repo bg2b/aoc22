@@ -60,15 +60,15 @@ void part1() {
   trees ts;
   vector<vector<bool>> visible(ts.h(), vector<bool>(ts.w(), false));
   ts.scan4([&](int i, int j, int di, int dj) {
-	     char max_height = '0' - 1;
-	     while (char t = ts.at(i, j)) {
-	       if (t > max_height)
-		 visible[i][j] = true;
-	       max_height = max(max_height, t);
-	       i += di;
-	       j += dj;
-	     }
-	   });
+             char max_height = '0' - 1;
+             while (char t = ts.at(i, j)) {
+               if (t > max_height)
+                 visible[i][j] = true;
+               max_height = max(max_height, t);
+               i += di;
+               j += dj;
+             }
+           });
   unsigned ans = 0;
   for (int i = 0; i < ts.h(); ++i)
     for (int j = 0; j < ts.w(); ++j)
@@ -80,26 +80,26 @@ void part2() {
   trees ts;
   vector<vector<unsigned>> scenic_score(ts.h(), vector<unsigned>(ts.w(), 1));
   ts.scan4([&](int i, int j, int di, int dj) {
-	     // num_seen[t] = number of trees that can be seen from a
-	     // tree of height t (0-indexed, i.e., subtract '0').
-	     // This starts at 0 for an edge.
-	     int const num_heights = 10;
-	     vector<unsigned> num_seen(num_heights, 0);
-	     while (char t = ts.at(i, j)) {
-	       t -= '0';
-	       assert(t < num_heights);
-	       scenic_score[i][j] *= num_seen[t];
-	       // Trees of <= t can't see farther than this tree
-	       for (char small = 0; small <= t; ++small)
-		 num_seen[small] = 1;
-	       // Trees of > t can see this tree in addition to what
-	       // they could see before
-	       for (char big = t + 1; big < num_heights; ++big)
-		 ++num_seen[big];
-	       i += di;
-	       j += dj;
-	     }
-	   });
+             // num_seen[t] = number of trees that can be seen from a
+             // tree of height t (0-indexed, i.e., subtract '0').
+             // This starts at 0 for an edge.
+             int const num_heights = 10;
+             vector<unsigned> num_seen(num_heights, 0);
+             while (char t = ts.at(i, j)) {
+               t -= '0';
+               assert(t < num_heights);
+               scenic_score[i][j] *= num_seen[t];
+               // Trees of <= t can't see farther than this tree
+               for (char small = 0; small <= t; ++small)
+                 num_seen[small] = 1;
+               // Trees of > t can see this tree in addition to what
+               // they could see before
+               for (char big = t + 1; big < num_heights; ++big)
+                 ++num_seen[big];
+               i += di;
+               j += dj;
+             }
+           });
   unsigned ans = 0;
   for (int i = 0; i < ts.h(); ++i)
     for (int j = 0; j < ts.w(); ++j)

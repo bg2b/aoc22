@@ -19,14 +19,14 @@ vector<size_t> read() {
   vector<size_t> sizes;
   // Pop a directory from the traversal stack and save the size
   auto pop_dir = [&]() {
-		   size_t dir_size = sizes.back();
-		   sizes.pop_back();
-		   // Save size of this directory
-		   dir_sizes.push_back(dir_size);
-		   // This directory's size is also part of its parent
-		   if (!sizes.empty())
-		     sizes.back() += dir_size;
-		 };
+                   size_t dir_size = sizes.back();
+                   sizes.pop_back();
+                   // Save size of this directory
+                   dir_sizes.push_back(dir_size);
+                   // This directory's size is also part of its parent
+                   if (!sizes.empty())
+                     sizes.back() += dir_size;
+                 };
   string line;
   while (getline(cin, line)) {
     if (line == "$ cd ..") {
@@ -73,7 +73,7 @@ void part2() {
   size_t used = dir_sizes.back();
   size_t free = total_disk - used;
   assert(free < required);
-  size_t ans = used;			// Can always rm -rf /
+  size_t ans = used;                    // Can always rm -rf /
   for (auto dir_size : dir_sizes)
     if (free + dir_size >= required && dir_size < ans)
       ans = dir_size;

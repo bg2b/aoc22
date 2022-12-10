@@ -48,12 +48,12 @@ void part1() {
 
 void part2() {
   score([](int goal, int opponent) {
-	  int me = (opponent + 2 + goal) % 3;
-	  assert((goal == 0 && beats(opponent, me)) ||
-		 (goal == 2 && beats(me, opponent)) ||
-		 (goal == 1 && me == opponent));
-	  return me;
-	});
+          int me = (opponent + 2 + goal) % 3;
+          assert((goal == 0 && beats(opponent, me)) ||
+                 (goal == 2 && beats(me, opponent)) ||
+                 (goal == 1 && me == opponent));
+          return me;
+        });
 }
 
 int main(int argc, char **argv) {

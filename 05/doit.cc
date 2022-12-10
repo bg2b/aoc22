@@ -37,7 +37,7 @@ vector<string> read_stacks() {
     for (size_t i = 0; i < num_stacks; ++i) {
       char item = line[4 * i + 1];
       if (item != ' ')
-	stacks[i].push_back(item);
+        stacks[i].push_back(item);
     }
   }
   return stacks;
@@ -63,22 +63,22 @@ void crane_sim(function<void(unsigned count, string &from, string &to)> move) {
 
 void part1() {
   crane_sim([](unsigned count, string &from, string &to) {
-	      for (unsigned i = 0; i < count; ++i) {
-		assert(!from.empty());
-		char item = from.back();
-		from.pop_back();
-		to.push_back(item);
-	      }
-	    });
+              for (unsigned i = 0; i < count; ++i) {
+                assert(!from.empty());
+                char item = from.back();
+                from.pop_back();
+                to.push_back(item);
+              }
+            });
 }
 
 void part2() {
   crane_sim([](unsigned count, string &from, string &to) {
-	      assert(from.length() >= count);
-	      string crates = from.substr(from.length() - count);
-	      from.resize(from.length() - count);
-	      to.append(crates);
-	    });
+              assert(from.length() >= count);
+              string crates = from.substr(from.length() - count);
+              from.resize(from.length() - count);
+              to.append(crates);
+            });
 }
 
 int main(int argc, char **argv) {

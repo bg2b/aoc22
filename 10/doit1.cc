@@ -37,9 +37,9 @@ void part1() {
 void part2() {
   int c = 0;
   Xecute([&](unsigned t, int x) {
-	   cout << ((c >= x - 1 && c <= x + 1) ? '@' : ' ');
-	   if (++c == 40) { cout << '\n'; c = 0; }
-	 });
+           cout << ((c >= x - 1 && c <= x + 1) ? '@' : ' ');
+           if (++c == 40) { cout << '\n'; c = 0; }
+         });
 }
 
 int main(int argc, char **argv) {

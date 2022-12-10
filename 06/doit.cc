@@ -17,12 +17,12 @@ void find_sync(size_t n) {
   string line;
   getline(cin, line);
   auto sync = [&](size_t pos) {
-		for (size_t i = 0; i < n; ++i)
-		  for (size_t j = i + 1; j < n; ++j)
-		    if (line[pos - i] == line[pos - j])
-		      return false;
-		return true;
-	      };
+                for (size_t i = 0; i < n; ++i)
+                  for (size_t j = i + 1; j < n; ++j)
+                    if (line[pos - i] == line[pos - j])
+                      return false;
+                return true;
+              };
   size_t pos;
   for (pos = n - 1; pos < line.length() && !sync(pos); ++pos)
     ;
@@ -47,16 +47,16 @@ void find_sync(size_t n) {
   // loop over the possible skips from largest to smallest. Then since
   // skip == n-j, j == n-skip.  And i runs from 0 and is less than j.
   auto sync = [&](size_t &pos) {
-		for (size_t skip = n - 1; skip > 0; --skip) {
-		  size_t j = n - skip;
-		  for (size_t i = 0; i < j; ++i)
-		    if (line[pos - i] == line[pos - j]) {
-		      pos += skip;
-		      return false;
-		    }
-		}
-		return true;
-	      };
+                for (size_t skip = n - 1; skip > 0; --skip) {
+                  size_t j = n - skip;
+                  for (size_t i = 0; i < j; ++i)
+                    if (line[pos - i] == line[pos - j]) {
+                      pos += skip;
+                      return false;
+                    }
+                }
+                return true;
+              };
   size_t pos;
   for (pos = n - 1; pos < line.length() && !sync(pos); )
     ;

@@ -114,8 +114,8 @@ void part1() {
   read();
   size_t ans = 0;
   root.total_size([&](size_t dir_size) {
-		    if (dir_size <= 100000) ans += dir_size;
-		  });
+                    if (dir_size <= 100000) ans += dir_size;
+                  });
   cout << ans << '\n';
 }
 
@@ -126,11 +126,11 @@ void part2() {
   size_t used = root.total_size([](size_t) {});
   size_t free = total_disk - used;
   assert(free < required);
-  size_t ans = used;			// Can always rm -rf /
+  size_t ans = used;                    // Can always rm -rf /
   root.total_size([&](size_t dir_size) {
-		    if (free + dir_size >= required && dir_size < ans)
-		      ans = dir_size;
-		  });
+                    if (free + dir_size >= required && dir_size < ans)
+                      ans = dir_size;
+                  });
   cout << ans << '\n';
 }
 

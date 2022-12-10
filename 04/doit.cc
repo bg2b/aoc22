@@ -25,16 +25,16 @@ void count_pairs(function<bool(int, int, int, int)> condition) {
 
 void part1() {
   count_pairs([](int s1, int e1, int s2, int e2) {
-		return ((s1 <= s2 && e2 <= e1) ||
-			(s2 <= s1 && e1 <= e2));
-	      });
+                return ((s1 <= s2 && e2 <= e1) ||
+                        (s2 <= s1 && e1 <= e2));
+              });
 }
 
 void part2() {
   count_pairs([](int s1, int e1, int s2, int e2) {
-		return ((s1 <= e2 && e1 >= s2) ||
-			(s2 <= e1 && e2 >= s1));
-	      });
+                return ((s1 <= e2 && e1 >= s2) ||
+                        (s2 <= e1 && e2 >= s1));
+              });
 }
 
 int main(int argc, char **argv) {
