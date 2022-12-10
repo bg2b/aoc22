@@ -47,9 +47,9 @@ void knot_pos::follow(knot_pos const &pos) {
 void rope_sim(int num_knots) {
   assert(num_knots >= 2);
   // The rope
-  knot_pos head;
-  vector<knot_pos> rest(num_knots - 1);
-  knot_pos &tail = rest.back();
+  vector<knot_pos> rope(num_knots);
+  knot_pos &head = rope.front();
+  knot_pos &tail = rope.back();
   // Where the tail has been
   set<knot_pos> tail_positions;
   tail_positions.emplace(tail);
@@ -59,12 +59,9 @@ void rope_sim(int num_knots) {
   while (cin >> dir >> num_steps) {
     for (int _ = 0; _ < num_steps; ++_) {
       head.step(dir);
-      // Drag each remaining knot after the previous one
-      knot_pos const *leader = &head;
-      for (auto &follower : rest) {
-	follower.follow(*leader);
-	leader = &follower;
-      }
+      // Drag each knot after the previous one
+      for (size_t i = 1; i < rope.size(); ++i)
+        rope[i].follow(rope[i - 1]);
       tail_positions.emplace(tail);
     }
   }
