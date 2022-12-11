@@ -44,7 +44,7 @@ void part2() {
   vector<int> calories;
   for (auto const &elf : elves)
     calories.push_back(reduce(elf.begin(), elf.end()));
-  sort(calories.begin(), calories.end(), [](int cal1, int cal2) { return cal1 > cal2; });
+  sort(calories.begin(), calories.end(), greater());
   int top3 = calories[0] + calories[1] + calories[2];
   cout << top3 << '\n';
 }
