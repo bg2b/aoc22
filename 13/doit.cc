@@ -8,50 +8,36 @@
 #include <string>
 #include <optional>
 #include <algorithm>
+#include <variant>
 #include <cstdlib>
 #include <cctype>
 #include <cassert>
 
 using namespace std;
 
-struct packet {
-  optional<int> v;
-  vector<packet> items;
-
+struct packet: public variant<int, vector<packet>> {
   // Single integer
-  packet(int v_) : v(v_) {}
-  // Empty list
-  packet() = default;
-  // Convert from input, advance s past whatever was converted
-  packet(char const *&s);
-
-  bool is_int() const { return v.has_value(); }
-  int value() const { return v.value(); }
-
-  // Wrap in a single-element list
-  packet wrap() const;
+  packet(int v) : variant(v) {}
+  // List
+  packet(vector<packet> const &pkts = vector<packet>()) : variant(pkts) {}
 };
 
-packet::packet(char const *&s) {
+packet read(char const *&s) {
   if (isdigit(*s)) {
-    v = atoi(s);
+    packet result(atoi(s));
     while (isdigit(*s))
       ++s;
-  } else {
-    assert(*s == '[');
-    ++s;
-    while (*s != ']') {
-      items.emplace_back(s);
-      if (*s == ',')
-        ++s;
-    }
-    ++s;
+    return result;
   }
-}
-
-packet packet::wrap() const {
   packet result;
-  result.items.emplace_back(*this);
+  assert(*s == '[');
+  ++s;
+  while (*s != ']') {
+    get<1>(result).emplace_back(read(s));
+    if (*s == ',')
+      ++s;
+  }
+  ++s;
   return result;
 }
 
@@ -61,39 +47,31 @@ optional<packet> read_packet() {
     if (line.empty())
       continue;
     char const *s = line.c_str();
-    return packet(s);
+    return read(s);
   }
   return nullopt;
 }
 
-optional<bool> right_order(packet const &l, packet const &r) {
-  if (l.is_int() && r.is_int()) {
-    if (l.value() == r.value())
-      return nullopt;
-    return l.value() < r.value();
-  }
-  if (l.is_int())
-    return right_order(l.wrap(), r);
-  if (r.is_int())
-    return right_order(l, r.wrap());
-  for (size_t i = 0; i < l.items.size() && i < r.items.size(); ++i) {
-    auto cmp = right_order(l.items[i], r.items[i]);
-    if (cmp.has_value())
+packet wrap(packet const &p) { return packet(vector<packet>(1, p)); }
+
+int compare(packet const &l, packet const &r) {
+  if (l.index() != r.index())
+    return compare(l.index() == 0 ? wrap(l) : l,
+                   r.index() == 0 ? wrap(r) : r);
+  if (l.index() == 0)
+    return get<0>(l) - get<0>(r);
+  for (size_t i = 0; i < get<1>(l).size() && i < get<1>(r).size(); ++i)
+    if (int cmp = compare(get<1>(l)[i], get<1>(r)[i]))
       return cmp;
-  }
-  if (l.items.size() == r.items.size())
-    return nullopt;
-  return l.items.size() < r.items.size();
+  return get<1>(l).size() - get<1>(r).size();
 }
 
 bool operator<(packet const &p1, packet const &p2) {
-  auto cmp = right_order(p1, p2);
-  assert(cmp.has_value());
-  return *cmp;
+  return compare(p1, p2) < 0;
 }
 
 bool operator==(packet const &p1, packet const &p2) {
-  return !right_order(p1, p2).has_value();
+  return compare(p1, p2) == 0;
 }
 
 void part1() {
@@ -108,8 +86,8 @@ void part2() {
   vector<packet> pkts;
   while (auto p = read_packet())
     pkts.push_back(*p);
-  auto div2 = packet(2).wrap().wrap();
-  auto div6 = packet(6).wrap().wrap();
+  auto div2 = wrap(wrap(packet(2)));
+  auto div6 = wrap(wrap(packet(6)));
   pkts.push_back(div2);
   pkts.push_back(div6);
   sort(pkts.begin(), pkts.end());
