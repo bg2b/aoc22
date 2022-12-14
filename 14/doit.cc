@@ -83,21 +83,15 @@ char cave::reaches() {
   if (at(c) != ' ')
     return at(c);
   while (c.second < abyss) {
-    coord next(c);
-    ++next.second;
-    // Try down, down left, down right in that order
-    if (at(next) != ' ') {
-      --next.first;
-      if (at(next) != ' ') {
-        next.first += 2;
-        if (at(next) != ' ') {
-          // All blocked
-          tiles[c] = 'o';
-          return ' ';
-        }
-      }
+    optional<coord> next;
+    for (int dx : { 0, -1, +1 })
+      if (!next && at({ c.first + dx, c.second + 1 }) == ' ')
+        next = { c.first + dx, c.second + 1 };
+    if (!next) {
+      tiles[c] = 'o';
+      return ' ';
     }
-    c = next;
+    c = *next;
   }
   return 'A';
 }
