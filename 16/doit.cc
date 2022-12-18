@@ -180,12 +180,10 @@ void part2() {
   // total.
   int best = 0;
   for (auto i = paths.begin(); i != paths.end(); ++i)
-    for (auto j = i; j != paths.end(); ++j)
-      if (i->is_disjoint_with(*j)) {
-        best = max(best, i->total + j->total);
-        // No need to check more since the paths are in order
-        break;
-      }
+    for (auto j = i; j != paths.end() && i->total + j->total > best; ++j)
+      if (i->is_disjoint_with(*j))
+        // Implicitly breaks since the paths are in order
+        best = i->total + j->total;
   cout << best << '\n';
 }
 
