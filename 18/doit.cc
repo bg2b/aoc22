@@ -80,17 +80,12 @@ void part2() {
       visit(adj);
     }
   }
-  // Everything between [ll+1, ur-1] which is not outside is either
-  // lava or spaces in the interior of the lava that should be ignored
-  set<coord> filled;
-  for (double i0 = ll[0] + 1; i0 <= ur[0] - 1; ++i0)
-    for (double i1 = ll[1] + 1; i1 <= ur[1] - 1; ++i1)
-      for (double i2 = ll[2] + 1; i2 <= ur[2] - 1; ++i2) {
-        coord c({ i0, i1, i2 });
-        if (!outside.count(c))
-          filled.insert(c);
-      }
-  cout << count_faces(filled) << '\n';
+  // Don't count the outer surfaces
+  int false_boundary = 0;
+  false_boundary += 2 * (ur[0] - ll[0] + 1) * (ur[1] - ll[1] + 1);
+  false_boundary += 2 * (ur[0] - ll[0] + 1) * (ur[2] - ll[2] + 1);
+  false_boundary += 2 * (ur[1] - ll[1] + 1) * (ur[2] - ll[2] + 1);
+  cout << count_faces(outside) - false_boundary << '\n';
 }
 
 int main(int argc, char **argv) {
