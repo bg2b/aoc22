@@ -1,6 +1,5 @@
 // -*- C++ -*-
-// Suggest -O on this one to avoid waiting a bit on part 2
-// g++ -std=c++17 -Wall -g -O -o doit doit.cc
+// g++ -std=c++17 -Wall -g -o doit doit.cc
 // ./doit 1 < input  # part 1
 // ./doit 2 < input  # part 2
 
@@ -14,15 +13,6 @@ using namespace std;
 
 using num = signed long;
 
-void shift1(list<num> &l, list<num>::iterator &it) {
-  num n = *it;
-  auto next = it;
-  if (++next == l.end()) next = l.begin();
-  if (++next == l.end()) next = l.begin();
-  l.erase(it);
-  it = l.insert(next, n);
-}
-
 void shift(list<num> &l, list<num>::iterator &it) {
   long shifts = *it;
   long szm1 = l.size() - 1;
@@ -31,8 +21,15 @@ void shift(list<num> &l, list<num>::iterator &it) {
   else
     shifts %= szm1;
   assert(shifts >= 0);
-  while (shifts-- > 0)
-    shift1(l, it);
+  if (shifts == 0)
+    return;
+  num n = *it;
+  auto next = it;
+  while (shifts-- >= 0)  // One extra iteration since insert() goes before
+    if (++next == l.end())
+      next = l.begin();
+  l.erase(it);
+  it = l.insert(next, n);
 }
 
 void solve(num decrypt, int num_iters) {
