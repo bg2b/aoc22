@@ -1,5 +1,6 @@
 // -*- C++ -*-
-// g++ -std=c++17 -Wall -g -o doit doit.cc
+// Optimization is useful for part 2
+// g++ -std=c++17 -Wall -g -O -o doit doit.cc
 // ./doit 1 < input  # part 1
 // ./doit 2 < input  # part 2
 
